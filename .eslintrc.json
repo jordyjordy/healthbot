@@ -1,0 +1,9 @@
+{
+    "extends": "thepineappledev",
+    "parserOptions": {
+        "project": "./tsconfig.json"
+    },
+    "rules": {
+        "no-console": 0
+    }
+}

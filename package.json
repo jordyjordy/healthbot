@@ -1,10 +1,12 @@
 {
-  "name": "healthbot",
+  "name": "reminderbot",
   "version": "0.1.0",
   "description": "A discord bot that gives customizable reminders to be healthy",
   "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npx tsc --p ./tsconfig.json",
+    "start": "node dist/index.js",
     "dev": "nodemon -L"
   },
   "keywords": [
@@ -15,6 +17,7 @@
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^18.15.11",
+    "@types/node-cron": "^3.0.7",
     "eslint": "^8.37.0",
     "eslint-config-thepineappledev": "^0.2.0",
     "node-ts": "^5.1.2",
@@ -23,6 +26,9 @@
   "dependencies": {
     "discord.js": "^14.9.0",
     "dotenv": "^16.0.3",
-    "eslint-plugin-jest": "^27.2.1"
+    "eslint-plugin-jest": "^27.2.1",
+    "mongodb": "^5.2.0",
+    "mongoose": "^7.0.3",
+    "node-cron": "^3.0.2"
   }
 }

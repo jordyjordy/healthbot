@@ -1,21 +1,26 @@
 
 version: '3'
 services:
-  healthbot:
+  reminderbot:
     build:
       context: ./
     ports:
       - "5000:5000"
-    container_name: healthbot
+    container_name: reminderbot
     volumes:
        - ./:/app
-       - ./node_modules:/app/node_modules
+       - /app/node_modules
+    environment:
+      MONGODB_URL: mongodb://test:test@mongo:27017/test?retryWrites=true&w=majority
   mongo:
     image: mongo
     restart: always
+    volumes:
+      - db-data:/data/db
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
+      MONGO_INITDB_ROOT_USERNAME: user
+      MONGO_INITDB_ROOT_PASSWORD: pass
+      MONGO_INITDB_DATABSE: test
 
   mongo-express:
     image: mongo-express
@@ -23,6 +28,9 @@ services:
     ports:
       - 8081:8081
     environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: root
-      ME_CONFIG_MONGODB_ADMINPASSWORD: example
-      ME_CONFIG_MONGODB_URL: mongodb://root:example@mongo:27017/
+      ME_CONFIG_MONGODB_ADMINUSERNAME: user
+      ME_CONFIG_MONGODB_ADMINPASSWORD: pass
+      ME_CONFIG_MONGODB_URL: mongodb://user:pass@mongo:27017/
+
+volumes:
+  db-data:

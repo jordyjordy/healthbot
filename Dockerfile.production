@@ -1,0 +1,16 @@
+FROM node:16-alpine as staging
+
+WORKDIR /app
+COPY package*.json ./
+RUN npm install --omit=dev
+RUN npm i -g nodemon
+COPY . .
+RUN npm run build
+
+FROM node:16-alpine as deploy
+
+WORKDIR /app
+COPY --from=staging /app/dist ./dist
+COPY --from=staging /app/node_modules ./node_modules
+COPY package*.json ./
+CMD ["npm", "run", "start"]

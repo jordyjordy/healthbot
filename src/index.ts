@@ -20,7 +20,9 @@ interface ClientWithCommands extends Client {
     >
 }
 
-const client = new Client({ intents: [GatewayIntentBits.Guilds] }) as ClientWithCommands;
+const client = new Client(
+    { intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildPresences] },
+) as ClientWithCommands;
 
 // When the client is ready, run this code (only once)
 // We use 'c' for the event parameter to keep it separate from the already defined 'client'
@@ -64,13 +66,15 @@ const messageHandler = async (schedule: string) => {
             Scheduler.remove(schedule);
             return;
         }
-        console.log(`informing ${actualSchedule.subscribers.length} users for ${actualSchedule.name}`);
-        actualSchedule.subscribers.forEach((user) => {
-            client.users.fetch(user).then((clientUser) => {
-                clientUser.send(actualSchedule.message);
+        actualSchedule.subscribers.forEach(async (user) => {
+            const server = await client.guilds.fetch(actualSchedule.serverId);
+            const serverUser = await server.members.fetch(user);
+            const status = serverUser.presence?.status;
+            if(!status || status === 'dnd' || status === 'offline') {
                 return;
-            }).catch(err => {
-                console.error('could not send message', err);
+            }
+            serverUser.send(actualSchedule.message).catch(() => {
+                console.log('could not message', serverUser.nickname);
             });
         });
     } catch (err) {

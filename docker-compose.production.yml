@@ -4,8 +4,11 @@ services:
   reminderbot:
     image: playball/reminderbot:latest
     restart: always
-    ports:
-      - "5000:5000"
     container_name: reminderbot
     env_file:
       - '.env.prod'
+  watchtower:
+    image: containrrr/watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: --interval 600 reminderbot

@@ -5,6 +5,7 @@ export interface ISchedule extends mongoose.Document {
     name: string,
     schedule: string,
     message: string,
+    desktopOnly: boolean,
     subscribers: string[]
 }
 
@@ -16,7 +17,7 @@ interface IScheduleModel extends mongoose.Model<ISchedule> {
     removeSubscriber(server:string, name:string, userId: string): Promise<boolean>,
     removeSchedule(server:string, name:string): Promise<boolean>,
     createNewSchedule(
-        userId: string, name: string, schedule: string, serverId: string, message: string,
+        userId: string, name: string, schedule: string, serverId: string, message: string, desktopOnly?: boolean
     ): Promise<ISchedule>
 }
 
@@ -35,6 +36,9 @@ const scheduleSchema = new mongoose.Schema<ISchedule>({
     message: {
         type: String,
         require: [true, "We need a message"],
+    },
+    desktopOnly: {
+        type: Boolean,
     },
     subscribers: {
         type: [
@@ -89,7 +93,7 @@ scheduleSchema.statics.removeSchedule = async (server:string, name:string): Prom
 };
 
 scheduleSchema.statics.createNewSchedule = async (
-    userId: string, name: string, schedule: string, serverId: string, message: string,
+    userId: string, name: string, schedule: string, serverId: string, message: string, desktopOnly: boolean = false,
 ) => {
     const scheduleObject = new Schedule({
         name,
@@ -97,6 +101,7 @@ scheduleSchema.statics.createNewSchedule = async (
         schedule,
         subscribers: [userId],
         message,
+        desktopOnly,
     });
 
     return scheduleObject.save();

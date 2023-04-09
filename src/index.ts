@@ -73,6 +73,9 @@ const messageHandler = async (schedule: string) => {
             if(!status || status === 'dnd' || status === 'offline') {
                 return;
             }
+            if(actualSchedule.desktopOnly && serverUser.presence.clientStatus?.desktop === undefined) {
+                return;
+            }
             serverUser.send(actualSchedule.message).catch(() => {
                 console.log('could not message', serverUser.nickname);
             });

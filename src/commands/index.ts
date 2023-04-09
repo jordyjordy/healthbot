@@ -3,6 +3,7 @@ import list from "./list";
 import subscribe from "./subscribe";
 import unsubscribe from "./unsubscribe";
 import remove from "./remove";
+import howto from "./howto";
 
 export default [
     register,
@@ -10,4 +11,5 @@ export default [
     subscribe,
     unsubscribe,
     remove,
+    howto,
 ];

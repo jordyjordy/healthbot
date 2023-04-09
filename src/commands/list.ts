@@ -22,7 +22,10 @@ const execute = async (interaction: ChatInputCommandInteraction) => {
         }
         return;
     }
-    const reply = schedules.map((schedule) => `name: ${schedule.name}, schedule: ${schedule.schedule}`).join('\n');
+    const reply = schedules.map(
+        (schedule) => `name: ${schedule.name},`
+        + ` schedule: \`${schedule.schedule}\`, desktop only: ${schedule.desktopOnly ? 'yes' : 'no'}`,
+    ).join('\n');
     interaction.reply(`Found checks:\n${reply}.`);
     return;
 };
@@ -33,6 +36,6 @@ export default {
         .addBooleanOption(option => option
             .setName('subscribed-checks')
             .setDescription('Only show checks you are described to on this server'))
-        .setDescription('List all ehecks'),
+        .setDescription('List all checks'),
     execute,
 };
